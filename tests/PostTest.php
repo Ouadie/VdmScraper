@@ -47,7 +47,7 @@ class PostTest extends TestCase
   */
   public function testGetPostByAuthor()
   {
-    $author = "maniokmaniok ";
+    $author = "maniokmaniok";
     $this->get("api/posts?author=$author")
             ->seeJson(['author' => $author]);
   }

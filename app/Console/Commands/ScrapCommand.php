@@ -59,7 +59,7 @@ class ScrapCommand extends Command {
   protected function getOptions()
   {
     return array(
-      array('count', null, InputOption::VALUE_OPTIONAL, 'The number of posts to store (max value is 200)', 2)
+      array('count', null, InputOption::VALUE_OPTIONAL, 'The number of posts to store (max value is 200)', 200)
     );
   }
 
