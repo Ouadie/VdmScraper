@@ -11,6 +11,6 @@
 |
 */
 
-$app->get('/', function () use ($app) {
-    return $app->version();
-});
+$app->get('/api/posts', 'PostController@showAll');
+
+$app->get('/api/posts/{id}', 'PostController@show');
