@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\IPostRepository;
 use \App\Models\Post;
 use Illuminate\Http\Request;
-use DateTime;
 
 class PostController extends Controller
 {
+
+  public function __construct(IPostRepository $postsRepository)
+  {
+    $this->postsRepository = $postsRepository;
+  }
+
   /**
   * Retrieve all posts.
   *
@@ -15,22 +21,7 @@ class PostController extends Controller
   */
   public function showAll(Request $request)
   {
-    $query = Post::query();
-
-    if ($request->has('author')) {
-      $query = $query->where('author', $request->author);
-    }
-
-    if ($request->has('from')) {
-      $query = $query->whereDate('date', '>=', new DateTime( $request->from ));
-    }
-
-    if ($request->has('to')) {
-      $query = $query->whereDate('date', '<=', new DateTime( $request->to ));
-    }
-
-    $posts = $query->get();
-
+    $posts = $this->postsRepository->findAll($request->get('author'), $request->get('from'), $request-> get('to'));
     return response()->json(['posts' => $posts,  'count' => count($posts)]);
   }
 
@@ -42,8 +33,7 @@ class PostController extends Controller
   */
   public function show($id)
   {
-    return response()->json(['post' => Post::find($id)]);
+    return response()->json(['post' => $this->postsRepository->findById($id)]);
   }
 
-  //
 }
