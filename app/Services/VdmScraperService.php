@@ -28,7 +28,7 @@ class VdmScraperService implements IScraperService {
         $id = $node->attr('id');
         $rightpart = explode(" - ", $node->filter('.right_part')->children()->eq(1)->text());
         $authorBlock = preg_replace('/par /', "", end($rightpart));
-        $author = preg_replace('#\(.*?\)#','', $authorBlock);
+        $author = trim(preg_replace('#\(.*?\)#','', $authorBlock));
         $date = preg_replace('#Le ([0-9]{2})\/([0-9]{2})\/([0-9]{4}) à ([0-9]{2}\:[0-9]{2})#', '$1-$2-$3 $4', $rightpart[0]);
 
         return [
