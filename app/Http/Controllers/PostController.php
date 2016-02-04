@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use \App\Models\Post;
+use Illuminate\Http\Request;
+use DateTime;
 
 class PostController extends Controller
 {
@@ -11,9 +13,24 @@ class PostController extends Controller
   *
   * @return Response
   */
-  public function showAll()
+  public function showAll(Request $request)
   {
-    $posts = Post::all();
+    $query = Post::query();
+
+    if ($request->has('author')) {
+      $query = $query->where('author', $request->author);
+    }
+
+    if ($request->has('from')) {
+      $query = $query->whereDate('date', '>=', new DateTime( $request->from ));
+    }
+
+    if ($request->has('to')) {
+      $query = $query->whereDate('date', '<=', new DateTime( $request->to ));
+    }
+
+    $posts = $query->get();
+
     return response()->json(['posts' => $posts,  'count' => count($posts)]);
   }
 
@@ -25,7 +42,6 @@ class PostController extends Controller
   */
   public function show($id)
   {
-    return Post::find($id);
     return response()->json(['post' => Post::find($id)]);
   }
 
